@@ -1,0 +1,11 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/home/longbin/.vim/bin'
+let g:netrw_dirhist_2='/home/longbin/.vim'
+let g:netrw_dirhist_3='/home/longbin/embedded'
+let g:netrw_dirhist_4='/home/longbin/.vim/nerdtree_plugin'
+let g:netrw_dirhist_5='/home/longbin/.vim/ftplugin'
+let g:netrw_dirhist_6='/home/longbin/.vim'
+let g:netrw_dirhist_7='/home/longbin/projects/TC70GA2/LINUX/android/external/zxing/qr_scanner/src/com/google/zxing/client/android/camera'
+let g:netrw_dirhist_8='/home/longbin/diff_test/test1'
+let g:netrw_dirhist_9='/usr/src/linux-headers-3.13.0-52/scripts'

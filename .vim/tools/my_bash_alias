@@ -1,0 +1,25 @@
+#! /bin/bash
+# ~/.my_bash_alias
+# we need add below 3 sentences to ~/.bashrc
+# if [ -f ~/.my_bash_alias ] ;then
+# 	. ~/.my_bash_alias
+# fi
+
+function __load_and_initialise_recordmydesktop_XXX()
+{
+	if [[ "x$(which recordmydesktop 2>/dev/null)" != "x" ]] ;then
+		alias recordmydesktop="$(which recordmydesktop) --fps=5 --on-the-fly-encoding --output=video_by_${USER}_$(date +%Y%m%d_%H%M%S)"
+		alias recordmydesktop_mini='recordmydesktop -x 100 -y 100 --width=400 --height=300'
+		alias recordmydesktop_full='recordmydesktop '
+	fi
+}
+__load_and_initialise_recordmydesktop_XXX
+
+function __load_and_initialise_cindent_XXX()
+{
+	if [ "x$(which indent 2> /dev/null)" != "x" ] ;then
+		alias cindent='indent -npro -kr -i8 -ts8 -sob -l80 -ss -ncs -br -ce -cdw -brs -brf -bap -cp1 -npsl'
+	fi
+}
+__load_and_initialise_cindent_XXX
+
