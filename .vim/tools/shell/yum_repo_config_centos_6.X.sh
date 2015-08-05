@@ -362,11 +362,12 @@ function yum_add_rpmfusion_repo() {
 function yum_add_nux_dextop_repo() {
 	if [ "x${PLAT_ARCH}" == "xx86_64" ] ;then
 		#64bit
-		${SUDO_RPM} -Uvh http://li.nux.ro/download/nux/dextop/el6/i386/nux-dextop-release-0-2.el6.nux.noarch.rpm
+		${SUDO_RPM} -Uvh http://li.nux.ro/download/nux/dextop/el6/x86_64/nux-dextop-release-0-2.el6.nux.noarch.rpm
 	else
 		#32bit
-		${SUDO_RPM} -Uvh http://li.nux.ro/download/nux/dextop/el6/x86_64/nux-dextop-release-0-2.el6.nux.noarch.rpm
+		${SUDO_RPM} -Uvh http://li.nux.ro/download/nux/dextop/el6/i386/nux-dextop-release-0-2.el6.nux.noarch.rpm
 	fi
+	${SUDO_RM} -f nux-dextop-release*.rpm
 	modify_varible_value_of_file_cb nux-dextop.repo enable 1
 }
 
