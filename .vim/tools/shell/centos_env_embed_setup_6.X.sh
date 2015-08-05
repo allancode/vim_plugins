@@ -1,14 +1,14 @@
 #! /bin/bash
 # Author:			longbin <beangr@163.com>
 # Created Date:		2014-06-24
-# Release Version:	1.15.731
-# Last Modified:	2015-07-31
+# Release Version:	1.15.805
+# Last Modified:	2015-08-05
 # this script is available for centos to configure embedded environment
 
 #list the software need to be installed to the variable FILELIST
-CENTOS_BASIC_TOOLS="axel vim ctags cscope curl rar unrar zip unzip ghex nautilus-open-terminal p7zip p7zip-plugins tree meld gimp tofrodos python-markdown subversion filezilla gedit firefox emacs "
+CENTOS_BASIC_TOOLS="axel vim ctags cscope curl rar unrar zip unzip ghex nautilus-open-terminal p7zip p7zip-plugins tree meld tofrodos python-markdown subversion filezilla gedit firefox "
 
-CENTOS_CODE_TOOLS="indent git-core gitk libtool cmake automake flex bison gperf graphviz gnupg gettext gcc gcc-c++ zlib-devel "
+CENTOS_CODE_TOOLS="indent git-core gitk libtool cmake automake flex bison gperf graphviz gnupg gettext gcc gcc-c++ zlib-devel emacs "
 
 # EMBED_TOOLS="ckermit minicom putty tftp-hpa tftpd-hpa uml-utilities nfs-kernel-server "
 CENTOS_EMBED_TOOLS="xinetd ckermit minicom putty tftp tftp-server nfs4-acl-tools nfs-utils nfs-utils-lib "
@@ -51,10 +51,10 @@ function check_user_UID(){
 check_user_UID
 
 ## check whether system is centos or not
-function check_system_distributor(){
+function check_system_distributor() {
 ## get system distributor ID: centos ?
-LINUX_DISTRIBUTOR=$(lsb_release -i |tr 'A-Z' 'a-z'|awk '/distributor/ {print $3}')
-LINUX_DISTRIBUTOR=${LINUX_DISTRIBUTOR:=$(cat /etc/issue |tr 'A-Z' 'a-z'|awk '{print $1}')}
+LINUX_DISTRIBUTOR=$(cat /etc/issue |tr 'A-Z' 'a-z'|awk ' /release/ {print $1}' | sed -n "1p")
+LINUX_DISTRIBUTOR=${LINUX_DISTRIBUTOR:=$(lsb_release -i |tr 'A-Z' 'a-z'|awk '/distributor/ {print $3}')}
 LINUX_DISTRIBUTOR=${LINUX_DISTRIBUTOR:=$(cat /etc/*release |tr 'A-Z' 'a-z'|awk '/\<release\>/ {print $1}'|sed -n '1p')}
 LINUX_DISTRIBUTOR=${LINUX_DISTRIBUTOR:=$(cat /etc/*release |tr 'A-Z' 'a-z'|awk '/distrib_id=/ {print $1}'|sed 's/distrib_id=//'|sed -n '1p')}
 
@@ -71,8 +71,8 @@ LINUX_DISTRIBUTOR=${LINUX_DISTRIBUTOR:=$(cat /etc/*release |tr 'A-Z' 'a-z'|awk '
 ## check whether system is centos 12.04 or 14.04
 function check_system_release_version(){
 ## get system release version: 6.5/6.6 ?
-LINUX_RELEASE_VERSION=$(lsb_release -r | tr 'A-Z' 'a-z' | awk '/release/ {print $2}')
-LINUX_RELEASE_VERSION=${LINUX_RELEASE_VERSION:=$(cat /etc/issue | awk '{print $2}')}
+LINUX_RELEASE_VERSION=$(cat /etc/issue | awk '/release/ {print $3}'| sed -n '1p')
+LINUX_RELEASE_VERSION=${LINUX_RELEASE_VERSION:=$(lsb_release -r | tr 'A-Z' 'a-z' | awk '/release/ {print $2}')}
 LINUX_RELEASE_VERSION=${LINUX_RELEASE_VERSION:=$(cat /etc/*release |tr 'A-Z' 'a-z'|awk '/\<release\>/ {print $3}'|sed -n '1p')}
 LINUX_RELEASE_VERSION=${LINUX_RELEASE_VERSION:=$(cat /etc/*release |tr 'A-Z' 'a-z'|awk '/distrib_release=/ {print $1}'|sed 's/distrib_release=//'|sed -n '1p')}
 

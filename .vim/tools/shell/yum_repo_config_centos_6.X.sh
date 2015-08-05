@@ -1,6 +1,6 @@
 #! /bin/bash
 # created by longbin <beangr@163.com>
-# 2015-08-03
+# 2015-08-05
 ## yum and yum plugins installation scripts
 
 PLAT_ARCH=$(uname -i | tr 'A-Z' 'a-z')
@@ -79,7 +79,7 @@ function check_yum_install_env() {
 function yum_plugins_installation() {
 	echo "Preparing to install yum plugins ..."
 	# ${SUDO_YUM} install yum-*
-	${SUDO_YUM} install axel
+	# ${SUDO_YUM} install axel
 	${SUDO_YUM} install yum-presto
 	${SUDO_YUM} install yum-fastestmirror
 	${SUDO_YUM} install yum-metadata-parser
@@ -320,13 +320,14 @@ function yum_add_atomic_repo() {
 
 # add epel repo
 function yum_add_epel_repo() {
-	if [ "${PLAT_ARCH}" == "xx86_64" ] ;then
-		#64bit:#
-		${SUDO_RPM} -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-	else
-		#32bit#
-		${SUDO_RPM} -ivh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
-	fi
+#	if [ "${PLAT_ARCH}" == "xx86_64" ] ;then
+#		#64bit:#
+#		${SUDO_RPM} -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+#	else
+#		#32bit#
+#		${SUDO_RPM} -ivh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+#	fi
+	${SUDO_YUM} install epel-release
 	${SUDO_RPM} --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
 }
 
@@ -358,14 +359,29 @@ function yum_add_rpmfusion_repo() {
 	fi
 }
 
+function yum_add_nux_dextop_repo() {
+	if [ "x${PLAT_ARCH}" == "xx86_64" ] ;then
+		#64bit
+		${SUDO_RPM} -Uvh http://li.nux.ro/download/nux/dextop/el6/i386/nux-dextop-release-0-2.el6.nux.noarch.rpm
+	else
+		#32bit
+		${SUDO_RPM} -Uvh http://li.nux.ro/download/nux/dextop/el6/x86_64/nux-dextop-release-0-2.el6.nux.noarch.rpm
+	fi
+	modify_varible_value_of_file_cb nux-dextop.repo enable 1
+}
+
 function setup_yum_repos_priority() {
 	pushd /etc/yum.repos.d/
-	REPO_FILE_LIST=" CentOS-Base.repo atomic.repo epel.repo epel-testing.repo rpmforge.repo rpmfusion-free-updates.repo "
+	REPO_FILE_LIST=" CentOS-Base.repo atomic.repo epel.repo epel-testing.repo nux-dextop.repo rpmforge.repo rpmfusion-free-updates.repo "
 	repo_priority_num=1
 	for file in ${REPO_FILE_LIST}
 	do
 		echo "updating ${file} ..."
-		modify_varible_value_of_file_cb ${file} priority XXX
+		if [ -f "${file}" ] :then
+			modify_varible_value_of_file_cb ${file} priority XXX
+		else
+			continue
+		fi
 		for ((i=0; i<=5; i++)) ;
 		do
 			let prn=${repo_priority_num}+${i}
@@ -384,7 +400,7 @@ function rebuild_yum_cache() {
 
 function install_and_setup_yum_plugins() {
 	yum_plugins_installation
-	yum_axel_plugin_install
+	# yum_axel_plugin_install
 }
 
 function enable_and_backup_repos() {
@@ -396,10 +412,12 @@ function add_extra_repos() {
 	create_local_repo_DVD
 	create_maintain_script
 	yum_add_adobe_repo
-	yum_add_atomic_repo
+	# yum_add_atomic_repo
 	yum_add_epel_repo
 	yum_add_rpmforge_repo
 	yum_add_rpmfusion_repo
+	yum_add_nux_dextop_repo
+	yum_axel_plugin_install
 }
 
 function setup_priority_and_rebuild_cache() {
